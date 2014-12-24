@@ -185,7 +185,7 @@ protected:
   typedef typename RealImageType::Pointer                   RealImagePointer;
   typedef typename RealImageType::ConstPointer              RealImageConstPointer;
 
-  MultiScaleLaplacianBlobDetectorImageFilter( void );
+  MultiScaleLaplacianBlobDetectorImageFilter();
 
   // not defined or implemented as default works
   // virtual ~MultiScaleLaplacianBlobDetectorImageFilter( void ) {}
