@@ -248,6 +248,12 @@ RegistrationHelper<TComputeType, VImageDimension>
              RealType intensityDistanceSigma,
              RealType euclideanDistanceSigma )
 {
+ std::cout << std::fixed << std::setprecision(13) << "@@@@@@ Create Metric:" << std::endl;
+  std::cout << __FILE__ << " " << __LINE__ << "MTRFI " << fixedImage->GetOrigin()
+  << " " << fixedImage->GetLargestPossibleRegion().GetSize()
+  << " " << fixedImage->GetSpacing()
+  << std::endl;
+
   Metric init( metricType, fixedImage, movingImage,
                fixedLabeledPointSet, movingLabeledPointSet,
                fixedIntensityPointSet, movingIntensityPointSet,
@@ -1106,6 +1112,9 @@ RegistrationHelper<TComputeType, VImageDimension>
 
         // Set up the image metric and scales estimator
 
+        std::cout << "--------------------------------------------------------" << std::endl;
+        std::cout << "CURRENT METRIC NUMBER " << currentMetricNumber << std::endl;
+        std::cout << __FILE__ << " " << __LINE__ << " " << fixedImage << std::endl;
         imageMetric->SetVirtualDomainFromImage( fixedImage );
         imageMetric->SetUseMovingImageGradientFilter( gradientfilter );
         imageMetric->SetUseFixedImageGradientFilter( gradientfilter );
@@ -1600,16 +1609,16 @@ RegistrationHelper<TComputeType, VImageDimension>
           // domain at each level.  To speed up calculation and avoid unnecessary memory
           // usage, we could calculate these fixed parameters directly.
 
-          typedef itk::ShrinkImageFilter<DisplacementFieldType, DisplacementFieldType> ShrinkFilterType;
+          typedef itk::ShrinkImageFilter<ImageType, ImageType> ShrinkFilterType;
           typename ShrinkFilterType::Pointer shrinkFilter = ShrinkFilterType::New();
           shrinkFilter->SetShrinkFactors( shrinkFactorsPerDimensionForAllLevels[level] );
-          shrinkFilter->SetInput( displacementField );
-          shrinkFilter->Update();
+          shrinkFilter->SetInput( preprocessedFixedImagesPerStage[0] );
+          shrinkFilter->GenerateOutputInformation(); //Don't need to allocate space or run the filter, just create output information
 
           typename DisplacementFieldTransformAdaptorType::Pointer fieldTransformAdaptor =
             DisplacementFieldTransformAdaptorType::New();
           fieldTransformAdaptor->SetRequiredSpacing( shrinkFilter->GetOutput()->GetSpacing() );
-          fieldTransformAdaptor->SetRequiredSize( shrinkFilter->GetOutput()->GetBufferedRegion().GetSize() );
+          fieldTransformAdaptor->SetRequiredSize( shrinkFilter->GetOutput()->GetLargestPossibleRegion().GetSize() );
           fieldTransformAdaptor->SetRequiredDirection( shrinkFilter->GetOutput()->GetDirection() );
           fieldTransformAdaptor->SetRequiredOrigin( shrinkFilter->GetOutput()->GetOrigin() );
           fieldTransformAdaptor->SetTransform( outputDisplacementFieldTransform );
@@ -1710,18 +1719,18 @@ RegistrationHelper<TComputeType, VImageDimension>
           // domain at each level.  To speed up calculation and avoid unnecessary memory
           // usage, we could calculate these fixed parameters directly.
 
-          typedef itk::ShrinkImageFilter<DisplacementFieldType, DisplacementFieldType> ShrinkFilterType;
+          typedef itk::ShrinkImageFilter<ImageType, ImageType> ShrinkFilterType;
           typename ShrinkFilterType::Pointer shrinkFilter = ShrinkFilterType::New();
           shrinkFilter->SetShrinkFactors( shrinkFactorsPerDimensionForAllLevels[level] );
-          shrinkFilter->SetInput( displacementField );
-          shrinkFilter->Update();
+          shrinkFilter->SetInput( preprocessedFixedImagesPerStage[0] );
+          shrinkFilter->GenerateOutputInformation(); //Don't need to allocate space or run the filter, just create output information
 
           typedef itk::BSplineSmoothingOnUpdateDisplacementFieldTransformParametersAdaptor<
               BSplineDisplacementFieldTransformType> BSplineDisplacementFieldTransformAdaptorType;
           typename BSplineDisplacementFieldTransformAdaptorType::Pointer bsplineFieldTransformAdaptor =
             BSplineDisplacementFieldTransformAdaptorType::New();
           bsplineFieldTransformAdaptor->SetRequiredSpacing( shrinkFilter->GetOutput()->GetSpacing() );
-          bsplineFieldTransformAdaptor->SetRequiredSize( shrinkFilter->GetOutput()->GetBufferedRegion().GetSize() );
+          bsplineFieldTransformAdaptor->SetRequiredSize( shrinkFilter->GetOutput()->GetLargestPossibleRegion().GetSize() );
           bsplineFieldTransformAdaptor->SetRequiredDirection( shrinkFilter->GetOutput()->GetDirection() );
           bsplineFieldTransformAdaptor->SetRequiredOrigin( shrinkFilter->GetOutput()->GetOrigin() );
           bsplineFieldTransformAdaptor->SetTransform( outputDisplacementFieldTransform );
@@ -1830,12 +1839,12 @@ RegistrationHelper<TComputeType, VImageDimension>
           typename ShrinkFilterType::Pointer shrinkFilter = ShrinkFilterType::New();
           shrinkFilter->SetShrinkFactors( shrinkFactorsPerDimensionForAllLevels[level] );
           shrinkFilter->SetInput( displacementField );
-          shrinkFilter->Update();
+          shrinkFilter->GenerateOutputInformation(); //Don't need to allocate space or run the filter, just create output information
 
           typename DisplacementFieldTransformAdaptorType::Pointer fieldTransformAdaptor =
             DisplacementFieldTransformAdaptorType::New();
           fieldTransformAdaptor->SetRequiredSpacing( shrinkFilter->GetOutput()->GetSpacing() );
-          fieldTransformAdaptor->SetRequiredSize( shrinkFilter->GetOutput()->GetBufferedRegion().GetSize() );
+          fieldTransformAdaptor->SetRequiredSize( shrinkFilter->GetOutput()->GetLargestPossibleRegion().GetSize() );
           fieldTransformAdaptor->SetRequiredDirection( shrinkFilter->GetOutput()->GetDirection() );
           fieldTransformAdaptor->SetRequiredOrigin( shrinkFilter->GetOutput()->GetOrigin() );
           fieldTransformAdaptor->SetTransform( outputDisplacementFieldTransform );
@@ -2062,7 +2071,7 @@ RegistrationHelper<TComputeType, VImageDimension>
             typename ShrinkFilterType::Pointer shrinkFilter = ShrinkFilterType::New();
             shrinkFilter->SetShrinkFactors( shrinkFactorsPerDimensionForAllLevels[level] );
             shrinkFilter->SetInput( displacementField );
-            shrinkFilter->Update();
+            shrinkFilter->GenerateOutputInformation(); //Don't need to allocate space or run the filter, just create output information
 
             typedef itk::BSplineSmoothingOnUpdateDisplacementFieldTransformParametersAdaptor<
                 BSplineDisplacementFieldTransformType>
@@ -2070,7 +2079,7 @@ RegistrationHelper<TComputeType, VImageDimension>
             typename BSplineDisplacementFieldTransformAdaptorType::Pointer bsplineFieldTransformAdaptor =
               BSplineDisplacementFieldTransformAdaptorType::New();
             bsplineFieldTransformAdaptor->SetRequiredSpacing( shrinkFilter->GetOutput()->GetSpacing() );
-            bsplineFieldTransformAdaptor->SetRequiredSize( shrinkFilter->GetOutput()->GetBufferedRegion().GetSize() );
+            bsplineFieldTransformAdaptor->SetRequiredSize( shrinkFilter->GetOutput()->GetLargestPossibleRegion().GetSize() );
             bsplineFieldTransformAdaptor->SetRequiredDirection( shrinkFilter->GetOutput()->GetDirection() );
             bsplineFieldTransformAdaptor->SetRequiredOrigin( shrinkFilter->GetOutput()->GetOrigin() );
             bsplineFieldTransformAdaptor->SetTransform( outputDisplacementFieldTransform );
@@ -2169,7 +2178,7 @@ RegistrationHelper<TComputeType, VImageDimension>
             typename ShrinkFilterType::Pointer shrinkFilter = ShrinkFilterType::New();
             shrinkFilter->SetShrinkFactors( shrinkFactorsPerDimensionForAllLevels[level] );
             shrinkFilter->SetInput( displacementField );
-            shrinkFilter->Update();
+            shrinkFilter->GenerateOutputInformation(); //Don't need to allocate space or run the filter, just create output information
 
             typedef itk::BSplineSmoothingOnUpdateDisplacementFieldTransformParametersAdaptor<
                 BSplineDisplacementFieldTransformType>
@@ -2177,7 +2186,7 @@ RegistrationHelper<TComputeType, VImageDimension>
             typename BSplineDisplacementFieldTransformAdaptorType::Pointer bsplineFieldTransformAdaptor =
               BSplineDisplacementFieldTransformAdaptorType::New();
             bsplineFieldTransformAdaptor->SetRequiredSpacing( shrinkFilter->GetOutput()->GetSpacing() );
-            bsplineFieldTransformAdaptor->SetRequiredSize( shrinkFilter->GetOutput()->GetBufferedRegion().GetSize() );
+            bsplineFieldTransformAdaptor->SetRequiredSize( shrinkFilter->GetOutput()->GetLargestPossibleRegion().GetSize() );
             bsplineFieldTransformAdaptor->SetRequiredDirection( shrinkFilter->GetOutput()->GetDirection() );
             bsplineFieldTransformAdaptor->SetRequiredOrigin( shrinkFilter->GetOutput()->GetOrigin() );
             bsplineFieldTransformAdaptor->SetTransform( outputDisplacementFieldTransform );
@@ -2416,7 +2425,7 @@ RegistrationHelper<TComputeType, VImageDimension>
           typename ShrinkFilterType::Pointer shrinkFilter = ShrinkFilterType::New();
           shrinkFilter->SetShrinkFactors( shrinkFactorsPerDimensionForAllLevels[level] );
           shrinkFilter->SetInput( preprocessedFixedImagesPerStage[0] );
-          shrinkFilter->Update();
+          shrinkFilter->GenerateOutputInformation(); //Don't need to allocate space or run the filter, just create output information
 
           // Although we shrink the images for the given levels,
           // we keep the size in time the same
@@ -2426,7 +2435,7 @@ RegistrationHelper<TComputeType, VImageDimension>
           velocityFieldSpacing.Fill( 1.0 );
           velocityFieldDirection.SetIdentity();
 
-          fixedImageSize = shrinkFilter->GetOutput()->GetBufferedRegion().GetSize();
+          fixedImageSize = shrinkFilter->GetOutput()->GetLargestPossibleRegion().GetSize();
           fixedImageOrigin = shrinkFilter->GetOutput()->GetOrigin();
           fixedImageSpacing = shrinkFilter->GetOutput()->GetSpacing();
           fixedImageDirection = shrinkFilter->GetOutput()->GetDirection();
@@ -2786,12 +2795,12 @@ RegistrationHelper<TComputeType, VImageDimension>
           typename ShrinkFilterType::Pointer shrinkFilter = ShrinkFilterType::New();
           shrinkFilter->SetShrinkFactors( shrinkFactorsPerDimensionForAllLevels[level] );
           shrinkFilter->SetInput( constantVelocityField );
-          shrinkFilter->Update();
+          shrinkFilter->GenerateOutputInformation(); //Don't need to allocate space or run the filter, just create output information
 
           typename DisplacementFieldTransformAdaptorType::Pointer fieldTransformAdaptor =
             DisplacementFieldTransformAdaptorType::New();
           fieldTransformAdaptor->SetRequiredSpacing( shrinkFilter->GetOutput()->GetSpacing() );
-          fieldTransformAdaptor->SetRequiredSize( shrinkFilter->GetOutput()->GetBufferedRegion().GetSize() );
+          fieldTransformAdaptor->SetRequiredSize( shrinkFilter->GetOutput()->GetLargestPossibleRegion().GetSize() );
           fieldTransformAdaptor->SetRequiredDirection( shrinkFilter->GetOutput()->GetDirection() );
           fieldTransformAdaptor->SetRequiredOrigin( shrinkFilter->GetOutput()->GetOrigin() );
           fieldTransformAdaptor->SetTransform( outputDisplacementFieldTransform );
@@ -2957,14 +2966,14 @@ RegistrationHelper<TComputeType, VImageDimension>
           typename ShrinkFilterType::Pointer shrinkFilter = ShrinkFilterType::New();
           shrinkFilter->SetShrinkFactors( shrinkFactorsPerDimensionForAllLevels[level] );
           shrinkFilter->SetInput( constantVelocityField );
-          shrinkFilter->Update();
+          shrinkFilter->GenerateOutputInformation(); //Don't need to allocate space or run the filter, just create output information
 
           typedef itk::BSplineExponentialDiffeomorphicTransformParametersAdaptor<BSplineDisplacementFieldTransformType>
             BSplineDisplacementFieldTransformAdaptorType;
           typename BSplineDisplacementFieldTransformAdaptorType::Pointer bsplineFieldTransformAdaptor =
             BSplineDisplacementFieldTransformAdaptorType::New();
           bsplineFieldTransformAdaptor->SetRequiredSpacing( shrinkFilter->GetOutput()->GetSpacing() );
-          bsplineFieldTransformAdaptor->SetRequiredSize( shrinkFilter->GetOutput()->GetBufferedRegion().GetSize() );
+          bsplineFieldTransformAdaptor->SetRequiredSize( shrinkFilter->GetOutput()->GetLargestPossibleRegion().GetSize() );
           bsplineFieldTransformAdaptor->SetRequiredDirection( shrinkFilter->GetOutput()->GetDirection() );
           bsplineFieldTransformAdaptor->SetRequiredOrigin( shrinkFilter->GetOutput()->GetOrigin() );
           bsplineFieldTransformAdaptor->SetTransform( outputDisplacementFieldTransform );
@@ -3095,7 +3104,7 @@ RegistrationHelper<TComputeType, VImageDimension>
           typename ShrinkFilterType::Pointer shrinkFilter = ShrinkFilterType::New();
           shrinkFilter->SetShrinkFactors( shrinkFactorsPerDimensionForAllLevels[level] );
           shrinkFilter->SetInput( preprocessedFixedImagesPerStage[0] );
-          shrinkFilter->Update();
+          shrinkFilter->GenerateOutputInformation(); //Don't need to allocate space or run the filter, just create output information
 
           // A good heuristic is to RealType the b-spline mesh resolution at each level
 
