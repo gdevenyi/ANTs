@@ -23,6 +23,7 @@ public:
   typedef typename ImageMetricType::MeasureType                        MeasureType;
   typedef itk::CompositeTransform<RealType, VImageDimension>           CompositeTransformType;
   typedef typename CompositeTransformType::TransformType               TransformBaseType;
+  typedef typename TransformBaseType::FixedParametersType              FixedParametersType;
 protected:
   antsRegistrationOptimizerCommandIterationUpdate()
   {
@@ -257,8 +258,8 @@ public:
         // Copy the information to each sub transform and add this transform to the final composite transform.
         const typename TransformBaseType::ParametersType & fixedImage_paras =
           inputFixedTransform->GetNthTransform(i)->GetParameters();
-        const typename TransformBaseType::ParametersType & fixedImage_fixed_paras =
-          inputFixedTransform->GetNthTransform(i)->GetFixedParameters();
+        const FixedParametersType & fixedImage_fixed_paras =
+                inputFixedTransform->GetNthTransform(i)->GetFixedParameters();
         subTransform->SetParameters( fixedImage_paras );
         subTransform->SetFixedParameters( fixedImage_fixed_paras );
         myFixedTransform->AddTransform( subTransform );
@@ -289,7 +290,7 @@ public:
         dynamic_cast<TransformBaseType *>( inputMovingTransform->GetNthTransform(i)->CreateAnother().GetPointer() ) );
       const typename TransformBaseType::ParametersType & moving_paras =
         inputMovingTransform->GetNthTransform(i)->GetParameters();
-      const typename TransformBaseType::ParametersType & moving_fixed_paras =
+      const FixedParametersType & moving_fixed_paras =
         inputMovingTransform->GetNthTransform(i)->GetFixedParameters();
       subTransform->SetParameters( moving_paras );
       subTransform->SetFixedParameters( moving_fixed_paras );
@@ -323,7 +324,7 @@ public:
         dynamic_cast<TransformBaseType *>( inputMovingTransform->GetNthTransform(i)->CreateAnother().GetPointer() ) );
       const typename TransformBaseType::ParametersType & moving_paras =
         inputMovingTransform->GetNthTransform(i)->GetParameters();
-      const typename TransformBaseType::ParametersType & moving_fixed_paras =
+      const FixedParametersType & moving_fixed_paras =
         inputMovingTransform->GetNthTransform(i)->GetFixedParameters();
       subTransform->SetParameters( moving_paras );
       subTransform->SetFixedParameters( moving_fixed_paras );
