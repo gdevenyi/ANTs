@@ -1,11 +1,10 @@
-sudo: false
 language: c
 cache: ccache
 
-matrix:
+jobs:
   include:
-#    - os: linux
-#      dist: xenial
+#    - stage: ITKv5
+#      os: linux
 #      addons:
 #        apt:
 #          sources:
@@ -19,8 +18,8 @@ matrix:
 #            - libgl1-mesa-dev
 #      env:
 #         - MATRIX_EVAL="export CC=gcc-4.9 && export CXX=g++-4.9"
-    - os: linux
-      dist: xenial
+    - stage: ITKv5
+      os: linux
       addons:
         apt:
           sources:
@@ -34,8 +33,12 @@ matrix:
             - libgl1-mesa-dev
       env:
          - MATRIX_EVAL="export CC=gcc-5 && export CXX=g++-5"
-    - os: linux
-      dist: xenial
+      script:
+        - mkdir -p build && cd build
+        - cmake -GNinja -DRUN_LONG_TESTS=OFF -DRUN_SHORT_TESTS=ON ..
+        - travis_wait 90 ninja -v ITKv5
+    - stage: ITKv5
+      os: linux
       addons:
         apt:
           sources:
@@ -49,8 +52,12 @@ matrix:
             - libgl1-mesa-dev
       env:
         - MATRIX_EVAL="export CC=gcc-6 && export CXX=g++-6"
-    - os: linux
-      dist: xenial
+      script:
+        - mkdir -p build && cd build
+        - cmake -GNinja -DRUN_LONG_TESTS=OFF -DRUN_SHORT_TESTS=ON ..
+        - travis_wait 90 ninja -v ITKv5
+    - stage: ITKv5
+      os: linux
       addons:
         apt:
           sources:
@@ -64,8 +71,12 @@ matrix:
             - libgl1-mesa-dev
       env:
         - MATRIX_EVAL="export CC=gcc-7 && export CXX=g++-7"
-    - os: linux
-      dist: xenial
+      script:
+        - mkdir -p build && cd build
+        - cmake -GNinja -DRUN_LONG_TESTS=OFF -DRUN_SHORT_TESTS=ON ..
+        - travis_wait 90 ninja -v ITKv5
+    - stage: ITKv5
+      os: linux
       addons:
         apt:
           sources:
@@ -79,8 +90,12 @@ matrix:
             - libgl1-mesa-dev
       env:
         - MATRIX_EVAL="export CC=gcc-8 && export CXX=g++-8"
-    - os: linux
-      dist: xenial
+      script:
+        - mkdir -p build && cd build
+        - cmake -GNinja -DRUN_LONG_TESTS=OFF -DRUN_SHORT_TESTS=ON ..
+        - travis_wait 90 ninja -v ITKv5
+    - stage: ITKv5
+      os: linux
       addons:
         apt:
           sources:
@@ -94,9 +109,13 @@ matrix:
             - libgl1-mesa-dev
       env:
         - MATRIX_EVAL="export CC=gcc-9 && export CXX=g++-9"
+      script:
+        - mkdir -p build && cd build
+        - cmake -GNinja -DRUN_LONG_TESTS=OFF -DRUN_SHORT_TESTS=ON ..
+        - travis_wait 90 ninja -v ITKv5
 #Linux Clang Starts Here
-    - os: linux
-      dist: xenial
+    - stage: ITKv5
+      os: linux
       addons:
         apt:
           sources:
@@ -110,8 +129,12 @@ matrix:
             - libgl1-mesa-dev
       env:
         - MATRIX_EVAL="export CC=clang-3.6 && export CXX=clang++-3.6"
-    - os: linux
-      dist: xenial
+      script:
+        - mkdir -p build && cd build
+        - cmake -GNinja -DRUN_LONG_TESTS=OFF -DRUN_SHORT_TESTS=ON ..
+        - travis_wait 90 ninja -v ITKv5
+    - stage: ITKv5
+      os: linux
       addons:
         apt:
           sources:
@@ -125,8 +148,12 @@ matrix:
             - libgl1-mesa-dev
       env:
         - MATRIX_EVAL="export CC=clang-3.7 && export CXX=clang++-3.7"
-    - os: linux
-      dist: xenial
+      script:
+        - mkdir -p build && cd build
+        - cmake -GNinja -DRUN_LONG_TESTS=OFF -DRUN_SHORT_TESTS=ON ..
+        - travis_wait 90 ninja -v ITKv5
+    - stage: ITKv5
+      os: linux
       addons:
         apt:
           sources:
@@ -140,8 +167,12 @@ matrix:
             - libgl1-mesa-dev
       env:
         - MATRIX_EVAL="export CC=clang-3.8 && export CXX=clang++-3.8"
-    - os: linux
-      dist: xenial
+      script:
+        - mkdir -p build && cd build
+        - cmake -GNinja -DRUN_LONG_TESTS=OFF -DRUN_SHORT_TESTS=ON ..
+        - travis_wait 90 ninja -v ITKv5
+    - stage: ITKv5
+      os: linux
       addons:
         apt:
           sources:
@@ -154,8 +185,12 @@ matrix:
             - libgl1-mesa-dev
       env:
         - MATRIX_EVAL="export CC=clang-3.9 && export CXX=clang++-3.9"
-    - os: linux
-      dist: xenial
+      script:
+        - mkdir -p build && cd build
+        - cmake -GNinja -DRUN_LONG_TESTS=OFF -DRUN_SHORT_TESTS=ON ..
+        - travis_wait 90 ninja -v ITKv5
+    - stage: ITKv5
+      os: linux
       addons:
         apt:
           sources:
@@ -168,8 +203,12 @@ matrix:
             - libgl1-mesa-dev
       env:
         - MATRIX_EVAL="export CC=clang-4.0 && export CXX=clang++-4.0"
-    - os: linux
-      dist: xenial
+      script:
+        - mkdir -p build && cd build
+        - cmake -GNinja -DRUN_LONG_TESTS=OFF -DRUN_SHORT_TESTS=ON ..
+        - travis_wait 90 ninja -v ITKv5
+    - stage: ITKv5
+      os: linux
       addons:
         apt:
           sources:
@@ -182,8 +221,12 @@ matrix:
             - libgl1-mesa-dev
       env:
         - MATRIX_EVAL="export CC=clang-5.0 && export CXX=clang++-5.0"
-    - os: linux
-      dist: xenial
+      script:
+        - mkdir -p build && cd build
+        - cmake -GNinja -DRUN_LONG_TESTS=OFF -DRUN_SHORT_TESTS=ON ..
+        - travis_wait 90 ninja -v ITKv5
+    - stage: ITKv5
+      os: linux
       addons:
         apt:
           sources:
@@ -196,8 +239,12 @@ matrix:
             - libgl1-mesa-dev
       env:
         - MATRIX_EVAL="export CC=clang-6.0 && export CXX=clang++-6.0"
-    - os: linux
-      dist: xenial
+      script:
+        - mkdir -p build && cd build
+        - cmake -GNinja -DRUN_LONG_TESTS=OFF -DRUN_SHORT_TESTS=ON ..
+        - travis_wait 90 ninja -v ITKv5
+    - stage: ITKv5
+      os: linux
       addons:
         apt:
           sources:
@@ -210,8 +257,12 @@ matrix:
             - libgl1-mesa-dev
       env:
         - MATRIX_EVAL="export CC=clang-7 && export CXX=clang++-7"
-    - os: linux
-      dist: xenial
+      script:
+        - mkdir -p build && cd build
+        - cmake -GNinja -DRUN_LONG_TESTS=OFF -DRUN_SHORT_TESTS=ON ..
+        - travis_wait 90 ninja -v ITKv5
+    - stage: ITKv5
+      os: linux
       addons:
         apt:
           sources:
@@ -224,76 +275,590 @@ matrix:
             - libgl1-mesa-dev
       env:
         - MATRIX_EVAL="export CC=clang-8 && export CXX=clang++-8"
+      script:
+        - mkdir -p build && cd build
+        - cmake -GNinja -DRUN_LONG_TESTS=OFF -DRUN_SHORT_TESTS=ON ..
+        - travis_wait 90 ninja -v ITKv5
 #OSX GCC Starts here
-#    - os: osx
+#      os: osx
 #      osx_image: xcode10.2
 #      env:
 #        - MATRIX_EVAL="brew update && brew install ninja && brew install ccache && (brew upgrade cmake || true) && brew reinstall gcc@4.9 && export PATH=\"/usr/local/opt/ccache/libexec:$PATH\" && export CC=gcc-4.9 && export CXX=g++-4.9"
-#    - os: osx
+#      os: osx
 #      osx_image: xcode10.2
 #      env:
 #        - MATRIX_EVAL="brew update && brew install ninja && brew install ccache && (brew upgrade cmake || true) && brew reinstall gcc@5 && export PATH=\"/usr/local/opt/ccache/libexec:$PATH\" && export CC=gcc-5 && export CXX=g++-5"
-    - os: osx
+    - stage: ITKv5
+      os: osx
       osx_image: xcode10.2
       env:
         - MATRIX_EVAL="brew update && brew install ninja && brew install ccache && (brew upgrade cmake || true) && brew reinstall gcc@6 && export PATH=\"/usr/local/opt/ccache/libexec:$PATH\" && export CC=gcc-6 && export CXX=g++-6"
-    - os: osx
+      script:
+        - mkdir -p build && cd build
+        - cmake -GNinja -DRUN_LONG_TESTS=OFF -DRUN_SHORT_TESTS=ON ..
+        - travis_wait 90 ninja -v ITKv5
+    - stage: ITKv5
+      os: osx
       osx_image: xcode10.2
       env:
         - MATRIX_EVAL="brew update && brew install ninja && brew install ccache && (brew upgrade cmake || true) && brew reinstall gcc@7 && export PATH=\"/usr/local/opt/ccache/libexec:$PATH\" && export CC=gcc-7 && export CXX=g++-7"
-    - os: osx
+      script:
+        - mkdir -p build && cd build
+        - cmake -GNinja -DRUN_LONG_TESTS=OFF -DRUN_SHORT_TESTS=ON ..
+        - travis_wait 90 ninja -v ITKv5
+    - stage: ITKv5
+      os: osx
       osx_image: xcode10.2
       env:
         - MATRIX_EVAL="brew update && brew install ninja && brew install ccache && (brew upgrade cmake || true) && brew reinstall gcc@8 && export PATH=\"/usr/local/opt/ccache/libexec:$PATH\" && export CC=gcc-8 && export CXX=g++-8"
-    - os: osx
+      script:
+        - mkdir -p build && cd build
+        - cmake -GNinja -DRUN_LONG_TESTS=OFF -DRUN_SHORT_TESTS=ON ..
+        - travis_wait 90 ninja -v ITKv5
+    - stage: ITKv5
+      os: osx
       osx_image: xcode10.2
       env:
         - MATRIX_EVAL="brew update && brew install ninja && brew install ccache && (brew upgrade cmake || true) && brew reinstall gcc@9 && export PATH=\"/usr/local/opt/ccache/libexec:$PATH\" && export CC=gcc-9 && export CXX=g++-9"
+      script:
+        - mkdir -p build && cd build
+        - cmake -GNinja -DRUN_LONG_TESTS=OFF -DRUN_SHORT_TESTS=ON ..
+        - travis_wait 90 ninja -v ITKv5
 #OSX clang starts here
-    - os: osx
+    - stage: ITKv5
+      os: osx
       osx_image: xcode10.2
       env:
         - MATRIX_EVAL="brew update && brew install ninja && brew install ccache && (brew upgrade cmake || true) && export PATH=\"/usr/local/opt/ccache/libexec:$PATH\""
-    - os: osx
+      script:
+        - mkdir -p build && cd build
+        - cmake -GNinja -DRUN_LONG_TESTS=OFF -DRUN_SHORT_TESTS=ON ..
+        - travis_wait 90 ninja -v ITKv5
+    - stage: ITKv5
+      os: osx
       osx_image: xcode10.1
       env:
         - MATRIX_EVAL="brew update && brew install ninja && brew install ccache && (brew upgrade cmake || true) && export PATH=\"/usr/local/opt/ccache/libexec:$PATH\""
-    - os: osx
+      script:
+        - mkdir -p build && cd build
+        - cmake -GNinja -DRUN_LONG_TESTS=OFF -DRUN_SHORT_TESTS=ON ..
+        - travis_wait 90 ninja -v ITKv5
+    - stage: ITKv5
+      os: osx
       osx_image: xcode10
       env:
         - MATRIX_EVAL="brew update && brew install ninja && brew install ccache && (brew upgrade cmake || true) && export PATH=\"/usr/local/opt/ccache/libexec:$PATH\""
-    - os: osx
+      script:
+        - mkdir -p build && cd build
+        - cmake -GNinja -DRUN_LONG_TESTS=OFF -DRUN_SHORT_TESTS=ON ..
+        - travis_wait 90 ninja -v ITKv5
+    - stage: ITKv5
+      os: osx
       osx_image: xcode9.4
       env:
         - MATRIX_EVAL="brew update && brew install ninja && brew install ccache && (brew upgrade cmake || true) && export PATH=\"/usr/local/opt/ccache/libexec:$PATH\""
-    - os: osx
+      script:
+        - mkdir -p build && cd build
+        - cmake -GNinja -DRUN_LONG_TESTS=OFF -DRUN_SHORT_TESTS=ON ..
+        - travis_wait 90 ninja -v ITKv5
+    - stage: ITKv5
+      os: osx
       osx_image: xcode9.3
       env:
         - MATRIX_EVAL="brew update && brew install ninja && brew install ccache && (brew upgrade cmake || true) && export PATH=\"/usr/local/opt/ccache/libexec:$PATH\""
-    - os: osx
+      script:
+        - mkdir -p build && cd build
+        - cmake -GNinja -DRUN_LONG_TESTS=OFF -DRUN_SHORT_TESTS=ON ..
+        - travis_wait 90 ninja -v ITKv5
+    - stage: ITKv5
+      os: osx
       osx_image: xcode9.2
       env:
         - MATRIX_EVAL="brew update && brew install ninja && brew install ccache && (brew upgrade cmake || true) && export PATH=\"/usr/local/opt/ccache/libexec:$PATH\""
-    - os: osx
+      script:
+        - mkdir -p build && cd build
+        - cmake -GNinja -DRUN_LONG_TESTS=OFF -DRUN_SHORT_TESTS=ON ..
+        - travis_wait 90 ninja -v ITKv5
+    - stage: ITKv5
+      os: osx
       osx_image: xcode9.1
       env:
         - MATRIX_EVAL="brew update && brew install ninja && brew install ccache && (brew upgrade cmake || true) && export PATH=\"/usr/local/opt/ccache/libexec:$PATH\""
-    - os: osx
+      script:
+        - mkdir -p build && cd build
+        - cmake -GNinja -DRUN_LONG_TESTS=OFF -DRUN_SHORT_TESTS=ON ..
+        - travis_wait 90 ninja -v ITKv5
+    - stage: ITKv5
+      os: osx
       osx_image: xcode9
       env:
         - MATRIX_EVAL="brew update && brew install ninja && brew install ccache && (brew upgrade cmake || true) && export PATH=\"/usr/local/opt/ccache/libexec:$PATH\""
-    - os: osx
+      script:
+        - mkdir -p build && cd build
+        - cmake -GNinja -DRUN_LONG_TESTS=OFF -DRUN_SHORT_TESTS=ON ..
+        - travis_wait 90 ninja -v ITKv5
+    - stage: ITKv5
+      os: osx
       osx_image: xcode8.3
       env:
         - MATRIX_EVAL="brew update && brew install ninja && brew install ccache && (brew upgrade cmake || true) && export PATH=\"/usr/local/opt/ccache/libexec:$PATH\""
-    - os: osx
+      script:
+        - mkdir -p build && cd build
+        - cmake -GNinja -DRUN_LONG_TESTS=OFF -DRUN_SHORT_TESTS=ON ..
+        - travis_wait 90 ninja -v ITKv5
+    - stage: ITKv5
+      os: osx
       osx_image: xcode8
       env:
         - MATRIX_EVAL="brew update && brew install ninja && brew upgrade gcc@4.9 && brew install ccache && (brew upgrade cmake || true) && export PATH=\"/usr/local/opt/ccache/libexec:$PATH\""
-    - os: osx
+      script:
+        - mkdir -p build && cd build
+        - cmake -GNinja -DRUN_LONG_TESTS=OFF -DRUN_SHORT_TESTS=ON ..
+        - travis_wait 90 ninja -v ITKv5
+    - stage: ITKv5
+      os: osx
       osx_image: xcode7.3
       env:
         - MATRIX_EVAL="brew update && brew install ninja && brew upgrade gcc@4.9 && brew install ccache && (brew upgrade cmake || true) && export PATH=\"/usr/local/opt/ccache/libexec:$PATH\""
+      script:
+        - mkdir -p build && cd build
+        - cmake -GNinja -DRUN_LONG_TESTS=OFF -DRUN_SHORT_TESTS=ON ..
+        - travis_wait 90 ninja -v ITKv5
+    - stage: ANTs
+      os: linux
+      addons:
+        apt:
+          sources:
+            - ubuntu-toolchain-r-test
+          packages:
+            - ninja-build
+            - cmake
+            - cmake-data
+            - g++-5
+            - gcc-5
+            - libgl1-mesa-dev
+      env:
+         - MATRIX_EVAL="export CC=gcc-5 && export CXX=g++-5"
+      script:
+        - mkdir -p build && cd build
+        - cmake -GNinja -DRUN_LONG_TESTS=OFF -DRUN_SHORT_TESTS=ON ..
+        - travis_wait 90 ninja -v
+        - cd ANTS-build && ctest
+    - stage: ANTs
+      os: linux
+      addons:
+        apt:
+          sources:
+            - ubuntu-toolchain-r-test
+          packages:
+            - ninja-build
+            - cmake
+            - cmake-data
+            - g++-6
+            - gcc-6
+            - libgl1-mesa-dev
+      env:
+        - MATRIX_EVAL="export CC=gcc-6 && export CXX=g++-6"
+      script:
+        - mkdir -p build && cd build
+        - cmake -GNinja -DRUN_LONG_TESTS=OFF -DRUN_SHORT_TESTS=ON ..
+        - travis_wait 90 ninja -v
+        - cd ANTS-build && ctest
+    - stage: ANTs
+      os: linux
+      addons:
+        apt:
+          sources:
+            - ubuntu-toolchain-r-test
+          packages:
+            - ninja-build
+            - cmake
+            - cmake-data
+            - g++-7
+            - gcc-7
+            - libgl1-mesa-dev
+      env:
+        - MATRIX_EVAL="export CC=gcc-7 && export CXX=g++-7"
+      script:
+        - mkdir -p build && cd build
+        - cmake -GNinja -DRUN_LONG_TESTS=OFF -DRUN_SHORT_TESTS=ON ..
+        - travis_wait 90 ninja -v
+        - cd ANTS-build && ctest
+    - stage: ANTs
+      os: linux
+      addons:
+        apt:
+          sources:
+            - ubuntu-toolchain-r-test
+          packages:
+            - ninja-build
+            - cmake
+            - cmake-data
+            - g++-8
+            - gcc-8
+            - libgl1-mesa-dev
+      env:
+        - MATRIX_EVAL="export CC=gcc-8 && export CXX=g++-8"
+      script:
+        - mkdir -p build && cd build
+        - cmake -GNinja -DRUN_LONG_TESTS=OFF -DRUN_SHORT_TESTS=ON ..
+        - travis_wait 90 ninja -v
+        - cd ANTS-build && ctest
+    - stage: ANTs
+      os: linux
+      addons:
+        apt:
+          sources:
+            - ubuntu-toolchain-r-test
+          packages:
+            - ninja-build
+            - cmake
+            - cmake-data
+            - g++-9
+            - gcc-9
+            - libgl1-mesa-dev
+      env:
+        - MATRIX_EVAL="export CC=gcc-9 && export CXX=g++-9"
+      script:
+        - mkdir -p build && cd build
+        - cmake -GNinja -DRUN_LONG_TESTS=OFF -DRUN_SHORT_TESTS=ON ..
+        - travis_wait 90 ninja -v
+        - cd ANTS-build && ctest
+#Linux Clang Starts Here
+    - stage: ANTs
+      os: linux
+      addons:
+        apt:
+          sources:
+            - ubuntu-toolchain-r-test
+            - llvm-toolchain-xenial-3.6
+          packages:
+            - ninja-build
+            - cmake
+            - cmake-data
+            - clang-3.6
+            - libgl1-mesa-dev
+      env:
+        - MATRIX_EVAL="export CC=clang-3.6 && export CXX=clang++-3.6"
+      script:
+        - mkdir -p build && cd build
+        - cmake -GNinja -DRUN_LONG_TESTS=OFF -DRUN_SHORT_TESTS=ON ..
+        - travis_wait 90 ninja -v
+        - cd ANTS-build && ctest
+    - stage: ANTs
+      os: linux
+      addons:
+        apt:
+          sources:
+            - ubuntu-toolchain-r-test
+            - llvm-toolchain-xenial-3.7
+          packages:
+            - ninja-build
+            - cmake
+            - cmake-data
+            - clang-3.7
+            - libgl1-mesa-dev
+      env:
+        - MATRIX_EVAL="export CC=clang-3.7 && export CXX=clang++-3.7"
+      script:
+        - mkdir -p build && cd build
+        - cmake -GNinja -DRUN_LONG_TESTS=OFF -DRUN_SHORT_TESTS=ON ..
+        - travis_wait 90 ninja -v
+        - cd ANTS-build && ctest
+    - stage: ANTs
+      os: linux
+      addons:
+        apt:
+          sources:
+            - ubuntu-toolchain-r-test
+            - llvm-toolchain-xenial-3.8
+          packages:
+            - ninja-build
+            - cmake
+            - cmake-data
+            - clang-3.8
+            - libgl1-mesa-dev
+      env:
+        - MATRIX_EVAL="export CC=clang-3.8 && export CXX=clang++-3.8"
+      script:
+        - mkdir -p build && cd build
+        - cmake -GNinja -DRUN_LONG_TESTS=OFF -DRUN_SHORT_TESTS=ON ..
+        - travis_wait 90 ninja -v
+        - cd ANTS-build && ctest
+    - stage: ANTs
+      os: linux
+      addons:
+        apt:
+          sources:
+            - llvm-toolchain-xenial-3.9
+          packages:
+            - ninja-build
+            - cmake
+            - cmake-data
+            - clang-3.9
+            - libgl1-mesa-dev
+      env:
+        - MATRIX_EVAL="export CC=clang-3.9 && export CXX=clang++-3.9"
+      script:
+        - mkdir -p build && cd build
+        - cmake -GNinja -DRUN_LONG_TESTS=OFF -DRUN_SHORT_TESTS=ON ..
+        - travis_wait 90 ninja -v
+        - cd ANTS-build && ctest
+    - stage: ANTs
+      os: linux
+      addons:
+        apt:
+          sources:
+            - llvm-toolchain-xenial-4.0
+          packages:
+            - ninja-build
+            - cmake
+            - cmake-data
+            - clang-4.0
+            - libgl1-mesa-dev
+      env:
+        - MATRIX_EVAL="export CC=clang-4.0 && export CXX=clang++-4.0"
+      script:
+        - mkdir -p build && cd build
+        - cmake -GNinja -DRUN_LONG_TESTS=OFF -DRUN_SHORT_TESTS=ON ..
+        - travis_wait 90 ninja -v
+        - cd ANTS-build && ctest
+    - stage: ANTs
+      os: linux
+      addons:
+        apt:
+          sources:
+            - llvm-toolchain-xenial-5.0
+          packages:
+            - ninja-build
+            - cmake
+            - cmake-data
+            - clang-5.0
+            - libgl1-mesa-dev
+      env:
+        - MATRIX_EVAL="export CC=clang-5.0 && export CXX=clang++-5.0"
+      script:
+        - mkdir -p build && cd build
+        - cmake -GNinja -DRUN_LONG_TESTS=OFF -DRUN_SHORT_TESTS=ON ..
+        - travis_wait 90 ninja -v
+        - cd ANTS-build && ctest
+    - stage: ANTs
+      os: linux
+      addons:
+        apt:
+          sources:
+            - llvm-toolchain-xenial-6.0
+          packages:
+            - ninja-build
+            - cmake
+            - cmake-data
+            - clang-6.0
+            - libgl1-mesa-dev
+      env:
+        - MATRIX_EVAL="export CC=clang-6.0 && export CXX=clang++-6.0"
+      script:
+        - mkdir -p build && cd build
+        - cmake -GNinja -DRUN_LONG_TESTS=OFF -DRUN_SHORT_TESTS=ON ..
+        - travis_wait 90 ninja -v
+        - cd ANTS-build && ctest
+    - stage: ANTs
+      os: linux
+      addons:
+        apt:
+          sources:
+            - llvm-toolchain-xenial-7
+          packages:
+            - ninja-build
+            - cmake
+            - cmake-data
+            - clang-7
+            - libgl1-mesa-dev
+      env:
+        - MATRIX_EVAL="export CC=clang-7 && export CXX=clang++-7"
+      script:
+        - mkdir -p build && cd build
+        - cmake -GNinja -DRUN_LONG_TESTS=OFF -DRUN_SHORT_TESTS=ON ..
+        - travis_wait 90 ninja -v
+        - cd ANTS-build && ctest
+    - stage: ANTs
+      os: linux
+      addons:
+        apt:
+          sources:
+            - llvm-toolchain-xenial-8
+          packages:
+            - ninja-build
+            - cmake
+            - cmake-data
+            - clang-8
+            - libgl1-mesa-dev
+      env:
+        - MATRIX_EVAL="export CC=clang-8 && export CXX=clang++-8"
+      script:
+        - mkdir -p build && cd build
+        - cmake -GNinja -DRUN_LONG_TESTS=OFF -DRUN_SHORT_TESTS=ON ..
+        - travis_wait 90 ninja -v
+        - cd ANTS-build && ctest
+#OSX GCC Starts here
+#      os: osx
+#      osx_image: xcode10.2
+#      env:
+#        - MATRIX_EVAL="brew update && brew install ninja && brew install ccache && (brew upgrade cmake || true) && brew reinstall gcc@4.9 && export PATH=\"/usr/local/opt/ccache/libexec:$PATH\" && export CC=gcc-4.9 && export CXX=g++-4.9"
+#      os: osx
+#      osx_image: xcode10.2
+#      env:
+#        - MATRIX_EVAL="brew update && brew install ninja && brew install ccache && (brew upgrade cmake || true) && brew reinstall gcc@5 && export PATH=\"/usr/local/opt/ccache/libexec:$PATH\" && export CC=gcc-5 && export CXX=g++-5"
+    - stage: ANTs
+      os: osx
+      osx_image: xcode10.2
+      env:
+        - MATRIX_EVAL="brew update && brew install ninja && brew install ccache && (brew upgrade cmake || true) && brew reinstall gcc@6 && export PATH=\"/usr/local/opt/ccache/libexec:$PATH\" && export CC=gcc-6 && export CXX=g++-6"
+      script:
+        - mkdir -p build && cd build
+        - cmake -GNinja -DRUN_LONG_TESTS=OFF -DRUN_SHORT_TESTS=ON ..
+        - travis_wait 90 ninja -v
+        - cd ANTS-build && ctest
+    - stage: ANTs
+      os: osx
+      osx_image: xcode10.2
+      env:
+        - MATRIX_EVAL="brew update && brew install ninja && brew install ccache && (brew upgrade cmake || true) && brew reinstall gcc@7 && export PATH=\"/usr/local/opt/ccache/libexec:$PATH\" && export CC=gcc-7 && export CXX=g++-7"
+      script:
+        - mkdir -p build && cd build
+        - cmake -GNinja -DRUN_LONG_TESTS=OFF -DRUN_SHORT_TESTS=ON ..
+        - travis_wait 90 ninja -v
+        - cd ANTS-build && ctest
+    - stage: ANTs
+      os: osx
+      osx_image: xcode10.2
+      env:
+        - MATRIX_EVAL="brew update && brew install ninja && brew install ccache && (brew upgrade cmake || true) && brew reinstall gcc@8 && export PATH=\"/usr/local/opt/ccache/libexec:$PATH\" && export CC=gcc-8 && export CXX=g++-8"
+      script:
+        - mkdir -p build && cd build
+        - cmake -GNinja -DRUN_LONG_TESTS=OFF -DRUN_SHORT_TESTS=ON ..
+        - travis_wait 90 ninja -v
+        - cd ANTS-build && ctest
+    - stage: ANTs
+      os: osx
+      osx_image: xcode10.2
+      env:
+        - MATRIX_EVAL="brew update && brew install ninja && brew install ccache && (brew upgrade cmake || true) && brew reinstall gcc@9 && export PATH=\"/usr/local/opt/ccache/libexec:$PATH\" && export CC=gcc-9 && export CXX=g++-9"
+      script:
+        - mkdir -p build && cd build
+        - cmake -GNinja -DRUN_LONG_TESTS=OFF -DRUN_SHORT_TESTS=ON ..
+        - travis_wait 90 ninja -v
+        - cd ANTS-build && ctest
+#OSX clang starts here
+    - stage: ANTs
+      os: osx
+      osx_image: xcode10.2
+      env:
+        - MATRIX_EVAL="brew update && brew install ninja && brew install ccache && (brew upgrade cmake || true) && export PATH=\"/usr/local/opt/ccache/libexec:$PATH\""
+      script:
+        - mkdir -p build && cd build
+        - cmake -GNinja -DRUN_LONG_TESTS=OFF -DRUN_SHORT_TESTS=ON ..
+        - travis_wait 90 ninja -v
+        - cd ANTS-build && ctest
+    - stage: ANTs
+      os: osx
+      osx_image: xcode10.1
+      env:
+        - MATRIX_EVAL="brew update && brew install ninja && brew install ccache && (brew upgrade cmake || true) && export PATH=\"/usr/local/opt/ccache/libexec:$PATH\""
+      script:
+        - mkdir -p build && cd build
+        - cmake -GNinja -DRUN_LONG_TESTS=OFF -DRUN_SHORT_TESTS=ON ..
+        - travis_wait 90 ninja -v
+        - cd ANTS-build && ctest
+    - stage: ANTs
+      os: osx
+      osx_image: xcode10
+      env:
+        - MATRIX_EVAL="brew update && brew install ninja && brew install ccache && (brew upgrade cmake || true) && export PATH=\"/usr/local/opt/ccache/libexec:$PATH\""
+      script:
+        - mkdir -p build && cd build
+        - cmake -GNinja -DRUN_LONG_TESTS=OFF -DRUN_SHORT_TESTS=ON ..
+        - travis_wait 90 ninja -v
+        - cd ANTS-build && ctest
+    - stage: ANTs
+      os: osx
+      osx_image: xcode9.4
+      env:
+        - MATRIX_EVAL="brew update && brew install ninja && brew install ccache && (brew upgrade cmake || true) && export PATH=\"/usr/local/opt/ccache/libexec:$PATH\""
+      script:
+        - mkdir -p build && cd build
+        - cmake -GNinja -DRUN_LONG_TESTS=OFF -DRUN_SHORT_TESTS=ON ..
+        - travis_wait 90 ninja -v
+        - cd ANTS-build && ctest
+    - stage: ANTs
+      os: osx
+      osx_image: xcode9.3
+      env:
+        - MATRIX_EVAL="brew update && brew install ninja && brew install ccache && (brew upgrade cmake || true) && export PATH=\"/usr/local/opt/ccache/libexec:$PATH\""
+      script:
+        - mkdir -p build && cd build
+        - cmake -GNinja -DRUN_LONG_TESTS=OFF -DRUN_SHORT_TESTS=ON ..
+        - travis_wait 90 ninja -v
+        - cd ANTS-build && ctest
+    - stage: ANTs
+      os: osx
+      osx_image: xcode9.2
+      env:
+        - MATRIX_EVAL="brew update && brew install ninja && brew install ccache && (brew upgrade cmake || true) && export PATH=\"/usr/local/opt/ccache/libexec:$PATH\""
+      script:
+        - mkdir -p build && cd build
+        - cmake -GNinja -DRUN_LONG_TESTS=OFF -DRUN_SHORT_TESTS=ON ..
+        - travis_wait 90 ninja -v
+        - cd ANTS-build && ctest
+    - stage: ANTs
+      os: osx
+      osx_image: xcode9.1
+      env:
+        - MATRIX_EVAL="brew update && brew install ninja && brew install ccache && (brew upgrade cmake || true) && export PATH=\"/usr/local/opt/ccache/libexec:$PATH\""
+      script:
+        - mkdir -p build && cd build
+        - cmake -GNinja -DRUN_LONG_TESTS=OFF -DRUN_SHORT_TESTS=ON ..
+        - travis_wait 90 ninja -v
+        - cd ANTS-build && ctest
+    - stage: ANTs
+      os: osx
+      osx_image: xcode9
+      env:
+        - MATRIX_EVAL="brew update && brew install ninja && brew install ccache && (brew upgrade cmake || true) && export PATH=\"/usr/local/opt/ccache/libexec:$PATH\""
+      script:
+        - mkdir -p build && cd build
+        - cmake -GNinja -DRUN_LONG_TESTS=OFF -DRUN_SHORT_TESTS=ON ..
+        - travis_wait 90 ninja -v
+        - cd ANTS-build && ctest
+    - stage: ANTs
+      os: osx
+      osx_image: xcode8.3
+      env:
+        - MATRIX_EVAL="brew update && brew install ninja && brew install ccache && (brew upgrade cmake || true) && export PATH=\"/usr/local/opt/ccache/libexec:$PATH\""
+      script:
+        - mkdir -p build && cd build
+        - cmake -GNinja -DRUN_LONG_TESTS=OFF -DRUN_SHORT_TESTS=ON ..
+        - travis_wait 90 ninja -v
+        - cd ANTS-build && ctest
+    - stage: ANTs
+      os: osx
+      osx_image: xcode8
+      env:
+        - MATRIX_EVAL="brew update && brew install ninja && brew upgrade gcc@4.9 && brew install ccache && (brew upgrade cmake || true) && export PATH=\"/usr/local/opt/ccache/libexec:$PATH\""
+      script:
+        - mkdir -p build && cd build
+        - cmake -GNinja -DRUN_LONG_TESTS=OFF -DRUN_SHORT_TESTS=ON ..
+        - travis_wait 90 ninja -v
+        - cd ANTS-build && ctest
+    - stage: ANTs
+      os: osx
+      osx_image: xcode7.3
+      env:
+        - MATRIX_EVAL="brew update && brew install ninja && brew upgrade gcc@4.9 && brew install ccache && (brew upgrade cmake || true) && export PATH=\"/usr/local/opt/ccache/libexec:$PATH\""
+      script:
+        - mkdir -p build && cd build
+        - cmake -GNinja -DRUN_LONG_TESTS=OFF -DRUN_SHORT_TESTS=ON ..
+        - travis_wait 90 ninja -v
+        - cd ANTS-build && ctest
 
 before_install:
     - eval "${MATRIX_EVAL}"
