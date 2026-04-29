@@ -123,14 +123,16 @@ public:
         if (this->m_ComputeFullScaleCCInterval != 0)
         {
           // Print header line one time
-          this->Logger() << "XXDIAGNOSTIC,Iteration,metricValue,convergenceValue,ITERATION_TIME_INDEX,SINCE_LAST,"
-                            "FullScaleCCInterval="
-                         << this->m_ComputeFullScaleCCInterval << std::flush << std::endl;
+          this->Logger()
+            << "XXDIAGNOSTIC,Iteration,Stage,Level,ShrinkFactor,SmoothingSigma,MaxIterations,metricValue,"
+               "convergenceValue,ITERATION_TIME_INDEX,SINCE_LAST,FullScaleCCInterval="
+            << this->m_ComputeFullScaleCCInterval << std::flush << std::endl;
         }
         else
         {
-          this->Logger() << "XXDIAGNOSTIC,Iteration,metricValue,convergenceValue,ITERATION_TIME_INDEX,SINCE_LAST"
-                         << std::endl;
+          this->Logger() << "XXDIAGNOSTIC,Iteration,Stage,Level,ShrinkFactor,SmoothingSigma,MaxIterations,metricValue,"
+                             "convergenceValue,ITERATION_TIME_INDEX,SINCE_LAST"
+                          << std::endl;
         }
       }
       m_clock.Stop();
@@ -164,10 +166,20 @@ public:
 
       std::streamsize ss = std::cout.precision();
 
-      this->Logger() << "1DIAGNOSTIC, " << std::setw(5) << lCurrentIteration << ", " << std::scientific
-                     << std::setprecision(12) << filter->GetCurrentMetricValue() << ", " << std::scientific
-                     << std::setprecision(12) << filter->GetCurrentConvergenceValue() << ", " << std::setprecision(4)
-                     << now << ", " << std::setprecision(4) << (now - this->m_lastTotalTime) << ", ";
+      const unsigned int shrinkFactor =
+        (currentLevel < this->m_ShrinkFactors.size()) ? this->m_ShrinkFactors[currentLevel] : 0;
+      const float smoothingSigma =
+        (currentLevel < this->m_SmoothingSigmas.size()) ? this->m_SmoothingSigmas[currentLevel] : 0.0f;
+      const unsigned int maxIterations =
+        (currentLevel < this->m_NumberOfIterations.size()) ? this->m_NumberOfIterations[currentLevel] : 0;
+
+      this->Logger() << "1DIAGNOSTIC, " << std::setw(5) << lCurrentIteration << ", " << std::setw(3)
+                      << this->m_CurrentStageNumber + 1 << ", " << std::setw(3) << currentLevel + 1 << ", "
+                      << std::setw(3) << shrinkFactor << ", " << std::setprecision(1) << std::fixed << smoothingSigma
+                      << ", " << std::setw(5) << maxIterations << ", " << std::scientific << std::setprecision(12)
+                      << filter->GetCurrentMetricValue() << ", " << std::scientific << std::setprecision(12)
+                      << filter->GetCurrentConvergenceValue() << ", " << std::setprecision(4) << now << ", "
+                      << std::setprecision(4) << (now - this->m_lastTotalTime) << ", ";
       if ((this->m_ComputeFullScaleCCInterval != 0) && fabs(metricValue) > 1e-7)
       {
         this->Logger() << std::scientific << std::setprecision(12) << metricValue << std::flush << std::endl;
@@ -206,6 +218,18 @@ public:
   SetNumberOfIterations(const std::vector<unsigned int> & iterations)
   {
     this->m_NumberOfIterations = iterations;
+  }
+
+  void
+  SetShrinkFactors(const std::vector<unsigned int> & shrinkFactors)
+  {
+    this->m_ShrinkFactors = shrinkFactors;
+  }
+
+  void
+  SetSmoothingSigmas(const std::vector<float> & smoothingSigmas)
+  {
+    this->m_SmoothingSigmas = smoothingSigmas;
   }
 
   void
@@ -515,6 +539,9 @@ private:
   unsigned int m_ComputeFullScaleCCInterval;
   unsigned int m_WriteIterationsOutputsInIntervals;
   unsigned int m_CurrentStageNumber;
+
+  std::vector<unsigned int> m_ShrinkFactors;
+  std::vector<float>        m_SmoothingSigmas;
 
   typename FixedImageType::Pointer  m_origFixedImage;
   typename MovingImageType::Pointer m_origMovingImage;

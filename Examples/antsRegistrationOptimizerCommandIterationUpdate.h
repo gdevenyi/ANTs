@@ -104,12 +104,14 @@ public:
         {
           // Print header line one time
           this->Logger()
-            << "DIAGNOSTIC,Iteration,metricValue,convergenceValue,ITERATION_TIME_INDEX,SINCE_LAST,FullScaleCCInterval="
+            << "DIAGNOSTIC,Iteration,Stage,Level,ShrinkFactor,SmoothingSigma,MaxIterations,metricValue,"
+               "convergenceValue,ITERATION_TIME_INDEX,SINCE_LAST,FullScaleCCInterval="
             << this->m_ComputeFullScaleCCInterval << std::flush << std::endl;
         }
         else
         {
-          this->Logger() << "DIAGNOSTIC,Iteration,metricValue,convergenceValue,ITERATION_TIME_INDEX,SINCE_LAST"
+          this->Logger() << "DIAGNOSTIC,Iteration,Stage,Level,ShrinkFactor,SmoothingSigma,MaxIterations,metricValue,"
+                             "convergenceValue,ITERATION_TIME_INDEX,SINCE_LAST"
                          << std::flush << std::endl;
         }
       }
@@ -142,11 +144,24 @@ public:
         this->Logger() << " "; // if the output of current iteration is written to disk, and star
       }                        // will appear before line, else a free space will be printed to keep visual alignment.
 
-      this->Logger() << "2DIAGNOSTIC, " << std::setw(5) << currentIteration << ", " << std::scientific
-                     << std::setprecision(12) << this->m_Optimizer->GetValue() << ", " << std::scientific
-                     << std::setprecision(12) << this->m_Optimizer->GetConvergenceValue() << ", "
-                     << std::setprecision(4) << now << ", " << std::setprecision(4) << (now - this->m_lastTotalTime)
-                     << ", ";
+      if (this->m_CurrentLevel == 0)
+      {
+        return;
+      }
+      const unsigned int levelIndex = this->m_CurrentLevel - 1;
+      const unsigned int shrinkFactor =
+        (levelIndex < this->m_ShrinkFactors.size()) ? this->m_ShrinkFactors[levelIndex] : 0;
+      const float smoothingSigma =
+        (levelIndex < this->m_SmoothingSigmas.size()) ? this->m_SmoothingSigmas[levelIndex] : 0.0f;
+      const unsigned int maxIterations =
+        (levelIndex < this->m_NumberOfIterations.size()) ? this->m_NumberOfIterations[levelIndex] : 0;
+      this->Logger() << "2DIAGNOSTIC, " << std::setw(5) << currentIteration << ", " << std::setw(3)
+                      << this->m_CurrentStageNumber + 1 << ", " << std::setw(3) << this->m_CurrentLevel << ", "
+                      << std::setw(3) << shrinkFactor << ", " << std::setprecision(1) << std::fixed << smoothingSigma
+                      << ", " << std::setw(5) << maxIterations << ", " << std::scientific << std::setprecision(12)
+                      << this->m_Optimizer->GetValue() << ", " << std::scientific << std::setprecision(12)
+                      << this->m_Optimizer->GetConvergenceValue() << ", " << std::setprecision(4) << now << ", "
+                      << std::setprecision(4) << (now - this->m_lastTotalTime) << ", ";
       if ((this->m_ComputeFullScaleCCInterval != 0) && std::fabs(metricValue) > static_cast<MeasureType>(1e-7))
       {
         this->Logger() << std::scientific << std::setprecision(12) << metricValue << std::flush << std::endl;
@@ -182,6 +197,18 @@ public:
   SetNumberOfIterations(const std::vector<unsigned int> & iterations)
   {
     this->m_NumberOfIterations = iterations;
+  }
+
+  void
+  SetShrinkFactors(const std::vector<unsigned int> & shrinkFactors)
+  {
+    this->m_ShrinkFactors = shrinkFactors;
+  }
+
+  void
+  SetSmoothingSigmas(const std::vector<float> & smoothingSigmas)
+  {
+    this->m_SmoothingSigmas = smoothingSigmas;
   }
 
   void
@@ -455,6 +482,9 @@ private:
   unsigned int m_WriteIterationsOutputsInIntervals;
   unsigned int m_CurrentStageNumber;
   unsigned int m_CurrentLevel;
+
+  std::vector<unsigned int> m_ShrinkFactors;
+  std::vector<float>        m_SmoothingSigmas;
 
   typename ImageType::Pointer m_origFixedImage;
   typename ImageType::Pointer m_origMovingImage;

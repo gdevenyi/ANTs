@@ -24,6 +24,7 @@ protected:
     this->m_lastTotalTime = now;
     m_clock.Start();
     this->m_LogStream = &std::cout;
+    this->m_CurrentStageNumber = 0;
   }
 
 public:
@@ -85,17 +86,27 @@ public:
       if (lCurrentIteration == 1)
       {
         // Print header line one time
-        this->Logger() << "XDIAGNOSTIC,Iteration,metricValue,convergenceValue,ITERATION_TIME_INDEX,SINCE_LAST"
+        this->Logger() << "XDIAGNOSTIC,Iteration,Stage,Level,ShrinkFactor,SmoothingSigma,MaxIterations,metricValue,"
+                          "convergenceValue,ITERATION_TIME_INDEX,SINCE_LAST"
                        << std::flush << std::endl;
       }
 
       m_clock.Stop();
       const itk::RealTimeClock::TimeStampType now = m_clock.GetTotal();
-      this->Logger() << "WDIAGNOSTIC, " << std::setw(5) << lCurrentIteration << ", " << std::scientific
-                     << std::setprecision(12) << filter->GetCurrentMetricValue() << ", " << std::scientific
-                     << std::setprecision(12) << filter->GetCurrentConvergenceValue() << ", " << std::setprecision(4)
-                     << now << ", " << std::setprecision(4) << (now - this->m_lastTotalTime) << ", " << std::flush
-                     << std::endl;
+      const unsigned int                       currentLevel = filter->GetCurrentLevel();
+      const unsigned int                       shrinkFactor =
+        (currentLevel < this->m_ShrinkFactors.size()) ? this->m_ShrinkFactors[currentLevel] : 0;
+      const float smoothingSigma =
+        (currentLevel < this->m_SmoothingSigmas.size()) ? this->m_SmoothingSigmas[currentLevel] : 0.0f;
+      const unsigned int maxIterations =
+        (currentLevel < this->m_NumberOfIterations.size()) ? this->m_NumberOfIterations[currentLevel] : 0;
+      this->Logger() << "WDIAGNOSTIC, " << std::setw(5) << lCurrentIteration << ", " << std::setw(3)
+                      << this->m_CurrentStageNumber + 1 << ", " << std::setw(3) << currentLevel + 1 << ", "
+                      << std::setw(3) << shrinkFactor << ", " << std::setprecision(1) << std::fixed << smoothingSigma
+                      << ", " << std::setw(5) << maxIterations << ", " << std::scientific << std::setprecision(12)
+                      << filter->GetCurrentMetricValue() << ", " << std::scientific << std::setprecision(12)
+                      << filter->GetCurrentConvergenceValue() << ", " << std::setprecision(4) << now << ", "
+                      << std::setprecision(4) << (now - this->m_lastTotalTime) << ", " << std::flush << std::endl;
       this->m_lastTotalTime = now;
       m_clock.Start();
     }
@@ -113,6 +124,20 @@ public:
     this->m_LogStream = &logStream;
   }
 
+  itkSetMacro(CurrentStageNumber, unsigned int);
+
+  void
+  SetShrinkFactors(const std::vector<unsigned int> & shrinkFactors)
+  {
+    this->m_ShrinkFactors = shrinkFactors;
+  }
+
+  void
+  SetSmoothingSigmas(const std::vector<float> & smoothingSigmas)
+  {
+    this->m_SmoothingSigmas = smoothingSigmas;
+  }
+
 private:
   std::ostream &
   Logger() const
@@ -124,6 +149,10 @@ private:
   std::ostream *                    m_LogStream;
   itk::TimeProbe                    m_clock;
   itk::RealTimeClock::TimeStampType m_lastTotalTime;
+
+  unsigned int               m_CurrentStageNumber;
+  std::vector<unsigned int>  m_ShrinkFactors;
+  std::vector<float>         m_SmoothingSigmas;
 
   // typename ImageType::Pointer m_origFixedImage;
   // typename ImageType::Pointer m_origMovingImage;
