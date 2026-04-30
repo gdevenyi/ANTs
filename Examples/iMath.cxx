@@ -1164,50 +1164,119 @@ iMath(std::vector<std::string> args, std::ostream * itkNotUsed(out_stream))
 
   if (argc < 5)
   {
-    std::cout << "\nUsage: " << argv[0]
-              << " ImageDimension <OutputImage.ext> [operations and inputs] <Image1.ext> <Image2.ext>" << std::endl;
-
-    std::cout << "\nUsage Information " << std::endl;
-    std::cout << " ImageDimension: 2 or 3 (for 2 or 3 dimensional operations)." << std::endl;
-    std::cout << " ImageDimension: 4 (for operations on 4D file, e.g. time-series data)." << std::endl;
-    std::cout << " Operator: See list of valid operators below." << std::endl;
-
     std::cout << std::endl;
-    std::cout << "Mask and Label set operations" << std::endl;
-    std::cout << "-----------------------------" << std::endl;
-    std::cout << "  GetLargestComponent    : Get the single largest labeled object in an image" << std::endl;
-    std::cout << "    Usage                : GetLargestComponent InputImage.ext {MinObjectSize=50}" << std::endl;
-
+    std::cout << "Usage: " << argv[0]
+              << " ImageDimension OutputImage.ext Operation InputImage.ext [operation-specific parameters]" << std::endl;
     std::cout << std::endl;
-    std::cout << "Morphological operations" << std::endl;
-    std::cout << "-----------------------------" << std::endl;
-    std::cout << "Possible operations are:" << std::endl;
-    std::cout << "  MC = Closing" << std::endl;
-    std::cout << "  MD = Dilation" << std::endl;
-    std::cout << "  ME = Erosion" << std::endl;
-    std::cout << "  MO = Opening" << std::endl;
-    std::cout << "Possible values for the shape parameter and associated settings are:" << std::endl;
-    std::cout << "  ball {RadiusIsParmetric=0}" << std::endl;
-    std::cout << "  box" << std::endl;
-    std::cout << "  cross" << std::endl;
-    std::cout << "  annulus {RadiusIsParametric=0} {Thickness=1} {IncludeCenter=0}" << std::endl;
-    std::cout << "  polygon {Lines=3}" << std::endl;
-    std::cout << "Description of Parameters" << std::endl;
-    std::cout
-      << "  RadiusIsParametric: The 'ball' and 'annulus' structuring elements have an optional flag called "
-         "'radiusIsParametric' (off by default). Setting this flag to true will use the parametric definition of the "
-         "object and will generate structuring elements with more accurate areas, which can be especially important "
-         "when morphological operations are intended to remove or retain objects of particular sizes. When the mode is "
-         "turned off (default), the radius is the same, but the object diameter is set to (radius*2)+1, which is the "
-         "size of the neighborhood region. Thus, the original ball and annulus structuring elements have a systematic "
-         "bias in the radius of +0.5 voxels in each dimension relative to the parametric definition of the radius. "
-         "Thus, we recommend turning this mode on for more accurate structuring elements, but this mode is turned off "
-         "by default for backward compatibility."
-      << std::endl;
-    std::cout << std::endl
-              << "  Usage : Operation InputImage.ext {Radius=1} {ObjectValue=1} {Shape=1} {RadiusIsParametric=0 or "
-                 "Lines=3} {Thickness=1} {IncludeCenter=0}"
-              << std::endl;
+    std::cout << "ImageDimension: 2, 3, or 4 (for 2D, 3D, or 4D operations)." << std::endl;
+    std::cout << std::endl;
+
+    std::cout << "Mask and Label Operations" << std::endl;
+    std::cout << "-------------------------" << std::endl;
+    std::cout << "  GetLargestComponent" << std::endl;
+    std::cout << "    Get the single largest labeled object in an image." << std::endl;
+    std::cout << "    Usage: GetLargestComponent InputImage.ext {MinObjectSize=50}" << std::endl;
+    std::cout << std::endl;
+    std::cout << "  FillHoles" << std::endl;
+    std::cout << "    Fill holes in binary objects." << std::endl;
+    std::cout << "    Usage: FillHoles InputImage.ext {HoleParam=2}" << std::endl;
+    std::cout << std::endl;
+    std::cout << "  PropagateLabelsThroughMask" << std::endl;
+    std::cout << "    Propagate labels through a mask using fast marching." << std::endl;
+    std::cout << "    Usage: PropagateLabelsThroughMask MaskImage.ext LabelsImage.ext" << std::endl;
+    std::cout << "           {StoppingValue=100} {PropagationMethod=0}" << std::endl;
+    std::cout << "    PropagationMethod: 0, 1, or 2." << std::endl;
+    std::cout << std::endl;
+
+    std::cout << "Binary Morphological Operations (MC, MD, ME, MO)" << std::endl;
+    std::cout << "--------------------------------------------------" << std::endl;
+    std::cout << "  MC = Morphological Closing" << std::endl;
+    std::cout << "  MD = Morphological Dilation" << std::endl;
+    std::cout << "  ME = Morphological Erosion" << std::endl;
+    std::cout << "  MO = Morphological Opening" << std::endl;
+    std::cout << std::endl;
+    std::cout << "  Usage: Operation InputImage.ext {Radius=1} {ObjectValue=1}" << std::endl;
+    std::cout << "         {Shape=ball} {ShapeParam} {Thickness=1} {IncludeCenter=0}" << std::endl;
+    std::cout << std::endl;
+    std::cout << "  Shape values and associated ShapeParam:" << std::endl;
+    std::cout << "    ball    {RadiusIsParametric=0}" << std::endl;
+    std::cout << "    box     (no additional parameters)" << std::endl;
+    std::cout << "    cross   (no additional parameters)" << std::endl;
+    std::cout << "    annulus {RadiusIsParametric=0} {Thickness=1} {IncludeCenter=0}" << std::endl;
+    std::cout << "    polygon {Lines=3}" << std::endl;
+    std::cout << std::endl;
+    std::cout << "  RadiusIsParametric: When off (default), the structuring element diameter is set" << std::endl;
+    std::cout << "  to (radius*2)+1. When on, the parametric definition is used for more accurate" << std::endl;
+    std::cout << "  areas (recommended, but off by default for backward compatibility)." << std::endl;
+    std::cout << std::endl;
+
+    std::cout << "Grayscale Morphological Operations" << std::endl;
+    std::cout << "----------------------------------" << std::endl;
+    std::cout << "  GC = Grayscale Closing" << std::endl;
+    std::cout << "  GD = Grayscale Dilation" << std::endl;
+    std::cout << "  GE = Grayscale Erosion" << std::endl;
+    std::cout << "  GO = Grayscale Opening" << std::endl;
+    std::cout << std::endl;
+    std::cout << "  Usage: Operation InputImage.ext {Radius=1}" << std::endl;
+    std::cout << std::endl;
+
+    std::cout << "Image Filtering Operations" << std::endl;
+    std::cout << "--------------------------" << std::endl;
+    std::cout << "  BlobDetector" << std::endl;
+    std::cout << "    Detect blobs in an image." << std::endl;
+    std::cout << "    Usage: BlobDetector InputImage.ext NumberOfBlobs" << std::endl;
+    std::cout << std::endl;
+    std::cout << "  Canny" << std::endl;
+    std::cout << "    Canny edge detection." << std::endl;
+    std::cout << "    Usage: Canny InputImage.ext Sigma LowerThreshold UpperThreshold" << std::endl;
+    std::cout << std::endl;
+    std::cout << "  Grad" << std::endl;
+    std::cout << "    Compute the gradient magnitude of an image." << std::endl;
+    std::cout << "    Usage: Grad InputImage.ext {Sigma=0.5} {Normalize=0}" << std::endl;
+    std::cout << std::endl;
+    std::cout << "  Laplacian" << std::endl;
+    std::cout << "    Compute the Laplacian of an image." << std::endl;
+    std::cout << "    Usage: Laplacian InputImage.ext {Sigma=0.5} {Normalize=0}" << std::endl;
+    std::cout << std::endl;
+    std::cout << "  PeronaMalik" << std::endl;
+    std::cout << "    Perona-Malik anisotropic diffusion smoothing." << std::endl;
+    std::cout << "    Usage: PeronaMalik InputImage.ext {NumberOfIterations=1} {Conductance=0.25}" << std::endl;
+    std::cout << std::endl;
+    std::cout << "  Sharpen" << std::endl;
+    std::cout << "    Sharpen an image." << std::endl;
+    std::cout << "    Usage: Sharpen InputImage.ext" << std::endl;
+    std::cout << std::endl;
+
+    std::cout << "Intensity Operations" << std::endl;
+    std::cout << "--------------------" << std::endl;
+    std::cout << "  HistogramEqualization" << std::endl;
+    std::cout << "    Histogram equalization of an image." << std::endl;
+    std::cout << "    Usage: HistogramEqualization InputImage.ext {Alpha=0} {Beta=1}" << std::endl;
+    std::cout << std::endl;
+    std::cout << "  Normalize" << std::endl;
+    std::cout << "    Normalize intensity values to [0, 1]." << std::endl;
+    std::cout << "    Usage: Normalize InputImage.ext" << std::endl;
+    std::cout << std::endl;
+    std::cout << "  TruncateIntensity" << std::endl;
+    std::cout << "    Truncate image intensity values at specified quantiles." << std::endl;
+    std::cout << "    Usage: TruncateIntensity InputImage.ext LowerQuantile UpperQuantile" << std::endl;
+    std::cout << "           {NumberOfBins=64} {MaskImage.ext}" << std::endl;
+    std::cout << std::endl;
+
+    std::cout << "Distance and Utility Operations" << std::endl;
+    std::cout << "-------------------------------" << std::endl;
+    std::cout << "  DistanceMap" << std::endl;
+    std::cout << "    Compute a distance map from a binary image." << std::endl;
+    std::cout << "    Usage: DistanceMap InputImage.ext {UseSpacing=1}" << std::endl;
+    std::cout << std::endl;
+    std::cout << "  MaurerDistance" << std::endl;
+    std::cout << "    Compute Euclidean distance to a binary object (Maurer method)." << std::endl;
+    std::cout << "    Usage: MaurerDistance InputImage.ext {ForegroundValue=1}" << std::endl;
+    std::cout << std::endl;
+    std::cout << "  Pad" << std::endl;
+    std::cout << "    Pad an image by a specified number of voxels." << std::endl;
+    std::cout << "    Usage: Pad InputImage.ext PaddingValue" << std::endl;
+    std::cout << std::endl;
 
     if (argc >= 2 && (std::string(argv[1]) == std::string("--help") || std::string(argv[1]) == std::string("-h")))
     {
